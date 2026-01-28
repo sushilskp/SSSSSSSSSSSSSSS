@@ -1,0 +1,8 @@
+{
+  "name": "Growth final",
+  "description": "A startup idea validation platform featuring the AI Idea Lab, discovery mode, and detailed 8-point market analysis.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
