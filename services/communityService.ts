@@ -99,15 +99,16 @@ export const communityService = {
         (userLikes || []).forEach(l => likedPostIds.add(l.post_id));
       }
 
-      // CRITICAL: Supabase count returns an array of objects e.g. [{count: 5}]. 
+      // CRITICAL FIX: Supabase count returns an array of objects e.g. [{count: 5}]. 
       // We must flatten this to a number to avoid React Error #31.
       return (data || []).map(post => ({
         ...post,
-        likes_count: (post.likes_count as any)?.[0]?.count || 0,
-        comments_count: (post.comments_count as any)?.[0]?.count || 0,
+        likes_count: Array.isArray(post.likes_count) ? (post.likes_count[0]?.count || 0) : (post.likes_count?.count || 0),
+        comments_count: Array.isArray(post.comments_count) ? (post.comments_count[0]?.count || 0) : (post.comments_count?.count || 0),
         has_liked: likedPostIds.has(post.id)
       }));
     } catch (e) {
+      console.error("Posts Fetch Error:", e);
       return [];
     }
   },
@@ -128,10 +129,11 @@ export const communityService = {
       if (error) throw error;
       return (data || []).map(post => ({
         ...post,
-        likes_count: (post.likes_count as any)?.[0]?.count || 0,
-        comments_count: (post.comments_count as any)?.[0]?.count || 0
+        likes_count: Array.isArray(post.likes_count) ? (post.likes_count[0]?.count || 0) : (post.likes_count?.count || 0),
+        comments_count: Array.isArray(post.comments_count) ? (post.comments_count[0]?.count || 0) : (post.comments_count?.count || 0)
       }));
     } catch (e) {
+      console.error("User Posts Fetch Error:", e);
       return [];
     }
   },
